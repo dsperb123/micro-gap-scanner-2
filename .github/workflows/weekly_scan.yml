@@ -1,0 +1,48 @@
+name: Weekly micro gap scan
+
+on:
+  schedule:
+    # 08:00 UTC Saturday — Friday's US close is settled by then,
+    # and it lands Saturday evening Melbourne time, before the Sunday review.
+    - cron: "0 8 * * 6"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: micro-gap-scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run the scan
+        run: python -m screener.run_scan
+
+      - name: Commit updated results
+        run: |
+          git config user.name  "micro-gap-bot"
+          git config user.email "actions@github.com"
+          git add docs/results.json docs/history.json
+          if git diff --staged --quiet; then
+            echo "No change in results — nothing to commit."
+          else
+            git commit -m "Scan for week ending $(date -u +%Y-%m-%d)"
+            git push
+          fi
