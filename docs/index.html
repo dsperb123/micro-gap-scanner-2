@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#10171C">
+<title>Micro Gap Scan — NASDAQ + NYSE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#10171C;
+    --panel:#171F26;
+    --panel-2:#1D272F;
+    --ink:#E4ECF1;
+    --ink-soft:#9FB2BF;
+    --ink-faint:#6B808E;
+    --rule:#2C3A45;
+    --rule-soft:#232E37;
+    --bull:#3FB984;
+    --bull-wash:#17372B;
+    --bear:#E4695C;
+    --bear-wash:#3A211F;
+    --plot:#6FA8E8;
+    --amber:#E0A83C;
+    --gap-void:#C8912E;
+    --grid:rgba(120,160,185,.055);
+    --row-hover:#1E2A33;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    background-image:
+      linear-gradient(to right, var(--grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+    background-size:22px 22px;
+    color:var(--ink);
+    font-family:'IBM Plex Mono',ui-monospace,monospace;
+    font-size:13px;
+    line-height:1.5;
+    padding:34px 20px 80px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1500px;margin:0 auto;}
+
+  .eyebrow{
+    font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ink-faint);margin:0 0 10px;
+  }
+  h1{
+    font-family:'Bricolage Grotesque',system-ui,sans-serif;
+    font-weight:800;font-size:clamp(30px,5.2vw,50px);
+    letter-spacing:-.025em;line-height:.98;margin:0 0 6px;
+  }
+  h1 .thin{font-weight:400;color:var(--ink-soft);}
+  .sub{color:var(--ink-soft);font-size:12.5px;margin:0 0 26px;max-width:70ch;}
+
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    padding:20px 22px;
+    margin-bottom:18px;
+  }
+  .panel-head{
+    display:flex;align-items:baseline;justify-content:space-between;
+    gap:14px;flex-wrap:wrap;margin-bottom:16px;
+  }
+  h2{
+    font-family:'Bricolage Grotesque',system-ui,sans-serif;
+    font-weight:600;font-size:15px;letter-spacing:.01em;margin:0;
+  }
+  .note{font-size:11px;color:var(--ink-faint);}
+
+  /* ---- stat strip ---- */
+  .stats{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    border:1px solid var(--rule);background:var(--panel);margin-bottom:18px;
+  }
+  .stat{padding:16px 18px;border-right:1px solid var(--rule-soft);}
+  .stat:last-child{border-right:0;}
+  .stat .k{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);}
+  .stat .v{
+    font-family:'Bricolage Grotesque',system-ui,sans-serif;
+    font-weight:800;font-size:29px;letter-spacing:-.02em;line-height:1.15;margin-top:2px;
+  }
+  .stat .v.bull{color:var(--bull);}
+  .stat .v.bear{color:var(--bear);}
+
+  /* ---- charts ---- */
+  .chart-svg{width:100%;height:auto;display:block;}
+  .concrow{
+    display:grid;grid-template-columns:190px 1fr 44px 52px;
+    gap:12px;align-items:center;margin-bottom:7px;
+  }
+  .concname{
+    font-size:11.5px;color:var(--ink-soft);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .concbar{background:var(--rule-soft);height:15px;display:block;}
+  .concbar span{background:var(--bull);height:15px;display:block;}
+  .concnum{font-size:11.5px;font-weight:600;text-align:right;}
+  .concpct{font-size:11px;color:var(--ink-faint);text-align:right;}
+  @media (max-width:640px){ .concrow{grid-template-columns:110px 1fr 36px 44px;gap:8px;} }
+  .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:11px;color:var(--ink-soft);}
+  .legend i{display:inline-block;width:11px;height:11px;margin-right:6px;vertical-align:-1px;}
+  .rangebar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+  .rangebar .chk{cursor:default;color:var(--ink-faint);}
+  .rangebar select{min-width:118px;}
+  .pill{
+    font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--ink-soft);border:1px solid var(--rule);padding:5px 9px;white-space:nowrap;
+  }
+  @media (max-width:820px){ .rangebar .spacer{display:none;} }
+
+  /* ---- controls ---- */
+  .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+  .seg{display:flex;border:1px solid var(--rule);background:var(--panel);}
+  .seg button{
+    font-family:inherit;font-size:11.5px;padding:7px 13px;border:0;cursor:pointer;
+    background:transparent;color:var(--ink-soft);border-right:1px solid var(--rule-soft);
+  }
+  .seg button:last-child{border-right:0;}
+  .seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper);font-weight:600;}
+  input[type=search],select{
+    font-family:inherit;font-size:11.5px;padding:7px 10px;
+    border:1px solid var(--rule);background:var(--panel-2);color:var(--ink);
+  }
+  input[type=search]::placeholder{color:var(--ink-faint);}
+  input[type=checkbox]{accent-color:var(--plot);}
+  input[type=search]{min-width:190px;}
+  .chk{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--ink-soft);cursor:pointer;}
+  .spacer{flex:1;}
+  .btn{
+    font-family:inherit;font-size:11.5px;padding:7px 13px;cursor:pointer;
+    border:1px solid var(--rule);background:var(--panel);color:var(--ink);
+  }
+  .btn:hover{background:var(--panel-2);border-color:var(--ink-faint);}
+  :focus-visible{outline:2px solid var(--plot);outline-offset:1px;}
+
+  /* ---- table ---- */
+  .tablewrap{overflow-x:auto;border:1px solid var(--rule);background:var(--panel);}
+  table{border-collapse:collapse;width:100%;font-size:12px;}
+  thead th{
+    position:sticky;top:0;background:var(--panel-2);z-index:2;
+    text-align:right;padding:11px 10px;white-space:nowrap;cursor:pointer;
+    font-weight:600;font-size:10px;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--ink-soft);border-bottom:1.5px solid var(--ink);user-select:none;
+  }
+  thead th.l{text-align:left;}
+  thead th:hover{color:var(--ink);}
+  thead th .ar{color:var(--plot);}
+  tbody td{
+    padding:9px 10px;text-align:right;white-space:nowrap;
+    border-bottom:1px solid var(--rule-soft);
+  }
+  tbody td.l{text-align:left;}
+  tbody tr:hover{background:var(--row-hover);}
+  .tick{font-weight:600;letter-spacing:.02em;}
+  .name{color:var(--ink-soft);max-width:230px;overflow:hidden;text-overflow:ellipsis;display:block;}
+  .ind{color:var(--ink-soft);}
+  .pos{color:var(--bull);}
+  .neg{color:var(--bear);}
+  .tag{
+    display:inline-block;padding:2px 8px;font-size:10.5px;font-weight:600;
+    letter-spacing:.05em;text-transform:uppercase;
+  }
+  .tag.bull{background:var(--bull-wash);color:var(--bull);}
+  .tag.bear{background:var(--bear-wash);color:var(--bear);}
+  .tag.none{color:var(--ink-faint);}
+  .flag{color:var(--amber);font-weight:600;}
+  .empty{padding:44px 20px;text-align:center;color:var(--ink-soft);}
+  .glyph{display:block;}
+
+  footer{margin-top:26px;font-size:11px;color:var(--ink-faint);max-width:80ch;}
+  footer code{background:var(--panel-2);padding:1px 5px;border:1px solid var(--rule);color:var(--ink-soft);}
+
+  @media (max-width:640px){
+    body{padding:22px 12px 60px;}
+    .panel{padding:16px 14px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;animation:none!important;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow" id="eyebrow">Loading</p>
+  <h1>Micro Gap Scan <span class="thin">/ NASDAQ + NYSE</span></h1>
+  <p class="sub">Weekly three-candle micro gaps across stocks that gained more than 4% last week, priced $5–$900, trading above their 20-week EMA, with ADR% over 1.5 and a market cap above $1B.</p>
+
+  <div class="stats" id="stats"></div>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Bull gap trend</h2>
+      <div class="legend">
+        <span><i style="background:var(--bull)"></i>Whole universe</span>
+        <span><i style="background:var(--plot)"></i>Passed the screen</span>
+      </div>
+    </div>
+    <div class="rangebar">
+      <label class="chk" for="fromweek">From</label>
+      <select id="fromweek" title="First week shown"></select>
+      <label class="chk" for="toweek">to</label>
+      <select id="toweek" title="Last week shown"></select>
+      <span class="pill" id="spanlen"></span>
+      <span class="spacer"></span>
+      <span class="note">Jump to:</span>
+      <div class="seg" id="rangeseg">
+        <button data-weeks="9">9w</button>
+        <button data-weeks="13">13w</button>
+        <button data-weeks="26">6mo</button>
+        <button data-weeks="52">1y</button>
+        <button data-weeks="0">All</button>
+      </div>
+      <button class="btn" id="latest" title="Move the window to the most recent weeks">Latest</button>
+    </div>
+    <div id="trend"></div>
+    <p class="note" id="trendnote"></p>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Where the gaps are</h2>
+      <span class="note" id="conccap"></span>
+    </div>
+    <div id="conc"></div>
+  </section>
+
+  <div class="controls">
+    <div class="seg" id="gapseg">
+      <button data-gap="all" aria-pressed="true">All</button>
+      <button data-gap="Bull" aria-pressed="false">Bull</button>
+      <button data-gap="Bear" aria-pressed="false">Bear</button>
+      <button data-gap="None" aria-pressed="false">No gap</button>
+    </div>
+    <select id="industry"><option value="all">All industries</option></select>
+    <input type="search" id="q" placeholder="Ticker or company">
+    <label class="chk"><input type="checkbox" id="near"> Within 10% of a high</label>
+    <span class="spacer"></span>
+    <span class="note" id="count"></span>
+    <button class="btn" id="csv">Download CSV</button>
+  </div>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr id="head"></tr></thead>
+      <tbody id="rows"><tr><td class="empty">Loading results…</td></tr></tbody>
+    </table>
+  </div>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const SVGNS = 'http://www.w3.org/2000/svg';
+
+const COLUMNS = [
+  {key:'symbol',       label:'Ticker',   align:'l', type:'text'},
+  {key:'name',         label:'Company',  align:'l', type:'text'},
+  {key:'_glyph',       label:'W-2·W-1·W0', align:'l', type:'none'},
+  {key:'micro_gap',    label:'Gap',      align:'l', type:'text'},
+  {key:'price',        label:'Price',    align:'r', type:'num'},
+  {key:'weekly_gain_pct', label:'Wk gain %', align:'r', type:'num'},
+  {key:'adr_pct',      label:'ADR %',    align:'r', type:'num'},
+  {key:'pct_above_ema',label:'% > 20wEMA', align:'r', type:'num'},
+  {key:'pct_from_52w_high', label:'% below 52w', align:'r', type:'num'},
+  {key:'pct_from_ath', label:'% below ATH', align:'r', type:'num'},
+  {key:'_near',        label:'Near high',align:'l', type:'text'},
+  {key:'market_cap',   label:'Mkt cap',  align:'r', type:'num'},
+  {key:'industry',     label:'Industry', align:'l', type:'text'},
+  {key:'sub_industry', label:'Sub-industry', align:'l', type:'text'},
+];
+
+const state = {rows:[], history:[], startIdx:0, endIdx:0,
+               gap:'all', industry:'all', q:'', nearOnly:false,
+               sortKey:'weekly_gain_pct', sortDir:-1};
+
+const money = n => n>=1e12 ? '$'+(n/1e12).toFixed(2)+'T'
+                 : n>=1e9  ? '$'+(n/1e9).toFixed(1)+'B'
+                 : '$'+(n/1e6).toFixed(0)+'M';
+const num = (n,d=2) => (n===null||n===undefined||Number.isNaN(n)) ? '—' : n.toFixed(d);
+
+/* ---------- signature: the three-candle micro gap glyph ---------- */
+function gapGlyph(candles, kind){
+  const W=64, H=26, PAD=3, slot=W/3, bw=7;
+  const svg = document.createElementNS(SVGNS,'svg');
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  svg.setAttribute('width',W); svg.setAttribute('height',H);
+  svg.setAttribute('class','glyph');
+  svg.setAttribute('role','img');
+  if(!candles || candles.length<3){ svg.setAttribute('aria-label','no data'); return svg; }
+
+  const lo = Math.min(...candles.map(c=>c.l));
+  const hi = Math.max(...candles.map(c=>c.h));
+  const span = (hi-lo) || 1;
+  const y = v => PAD + (1-(v-lo)/span)*(H-2*PAD);
+
+  // Shade the void between W-2 and W0 that defines the gap.
+  if(kind==='Bull' || kind==='Bear'){
+    const a = kind==='Bull' ? candles[0].h : candles[2].h;
+    const b = kind==='Bull' ? candles[2].l : candles[0].l;
+    const r = document.createElementNS(SVGNS,'rect');
+    r.setAttribute('x',0); r.setAttribute('width',W);
+    r.setAttribute('y', y(Math.max(a,b)));
+    r.setAttribute('height', Math.max(1, Math.abs(y(a)-y(b))));
+    r.setAttribute('fill','var(--gap-void)');
+    r.setAttribute('opacity','.5');
+    svg.appendChild(r);
+  }
+
+  candles.forEach((c,i)=>{
+    const cx = slot*i + slot/2;
+    const up = c.c >= c.o;
+    const col = up ? 'var(--bull)' : 'var(--bear)';
+    const wick = document.createElementNS(SVGNS,'line');
+    wick.setAttribute('x1',cx); wick.setAttribute('x2',cx);
+    wick.setAttribute('y1',y(c.h)); wick.setAttribute('y2',y(c.l));
+    wick.setAttribute('stroke',col); wick.setAttribute('stroke-width','1');
+    svg.appendChild(wick);
+    const body = document.createElementNS(SVGNS,'rect');
+    body.setAttribute('x',cx-bw/2); body.setAttribute('width',bw);
+    body.setAttribute('y',y(Math.max(c.o,c.c)));
+    body.setAttribute('height',Math.max(1.2,Math.abs(y(c.o)-y(c.c))));
+    body.setAttribute('fill',col);
+    svg.appendChild(body);
+  });
+  svg.setAttribute('aria-label', kind==='None' ? 'last three weekly candles'
+                                               : kind.toLowerCase()+' micro gap');
+  return svg;
+}
+
+/* ---------- trend chart ---------- */
+/* state.weeks: how many weeks wide the window is (0 = all history)
+   state.endIdx: index of the newest week shown, so the window can slide back  */
+function trendWindow(){
+  const h = state.history;
+  if(!h.length) return [];
+  return h.slice(state.startIdx, state.endIdx+1);
+}
+
+/* Keep the two dropdowns in a sane order and reflect the current span. */
+function syncRange(){
+  const last = state.history.length-1;
+  state.endIdx   = Math.max(0, Math.min(state.endIdx, last));
+  state.startIdx = Math.max(0, Math.min(state.startIdx, state.endIdx));
+  $('fromweek').value = String(state.startIdx);
+  $('toweek').value   = String(state.endIdx);
+  const n = state.endIdx - state.startIdx + 1;
+  const months = (n/4.345).toFixed(n < 9 ? 1 : 0);
+  $('spanlen').textContent = `${n} week${n===1?'':'s'} \u00b7 ~${months} mo`;
+  drawTrend();
+  drawConcentration();
+}
+
+/* Preset buttons anchor to whatever week is currently selected as the end,
+   so "6mo" means the six months up to there, not the six months up to today. */
+function applyPreset(weeks){
+  if(weeks <= 0){                       // "All" always means the entire record
+    state.startIdx = 0;
+    state.endIdx = state.history.length-1;
+  } else {
+    state.startIdx = Math.max(0, state.endIdx - weeks + 1);
+  }
+  syncRange();
+}
+
+function drawTrend(){
+  const host = $('trend');
+  host.innerHTML = '';
+  const data = trendWindow();
+  if(!data.length){ host.innerHTML='<p class="note">No history yet — run the scan once.</p>'; return; }
+
+  const W=1000, H=250, L=48, R=16, T=16, B=42;
+  const iw = W-L-R, ih = H-T-B;
+  const n = data.length;
+  const max = Math.max(...data.map(d=>d.universe_bull), 1);
+  const step = iw/n;
+  const bw = Math.max(1.5, Math.min(46, step*0.62));
+  const y = v => T + ih - (v/max)*ih;
+
+  // Labels are budgeted by available pixels, not bar count, so no window
+  // can ever crowd the axis: ~62px per date, ~34px per value above a bar.
+  const showValues = step >= 34;
+  const labelEvery = Math.max(1, Math.ceil(62/step));
+
+  const svg = document.createElementNS(SVGNS,'svg');
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  svg.setAttribute('class','chart-svg');
+  svg.setAttribute('role','img');
+  svg.setAttribute('aria-label',
+    `Bull micro gaps per week, ${data[0].week_ending} to ${data[n-1].week_ending}`);
+
+  const add=(tag,attrs,text)=>{
+    const el=document.createElementNS(SVGNS,tag);
+    for(const k in attrs) el.setAttribute(k,attrs[k]);
+    if(text!==undefined) el.textContent=text;
+    svg.appendChild(el); return el;
+  };
+  const tip=(el,text)=>el.appendChild(
+    Object.assign(document.createElementNS(SVGNS,'title'),{textContent:text}));
+
+  for(let i=0;i<=4;i++){
+    const v = max*i/4, yy = y(v);
+    add('line',{x1:L,x2:W-R,y1:yy,y2:yy,stroke:'var(--rule-soft)','stroke-width':1});
+    add('text',{x:L-9,y:yy+4,'text-anchor':'end','font-size':10.5,fill:'var(--ink-faint)',
+                'font-family':"'IBM Plex Mono',monospace"}, Math.round(v));
+  }
+
+  data.forEach((d,i)=>{
+    const cx = L + step*i + step/2;
+    const bar = add('rect',{x:cx-bw/2, y:y(d.universe_bull), width:bw,
+                height:Math.max(1,ih-(y(d.universe_bull)-T)), fill:'var(--bull)', opacity:.82});
+    tip(bar, `${d.week_ending}\n${d.universe_bull} bull gaps of ${d.stocks_covered} scanned `
+           + `(${d.bull_pct}%)\n${d.screened_bull} also passed the screen`);
+    if(showValues){
+      add('text',{x:cx, y:y(d.universe_bull)-7,'text-anchor':'middle','font-size':11,
+                  'font-weight':600, fill:'var(--ink)','font-family':"'IBM Plex Mono',monospace"},
+          d.universe_bull);
+    }
+    if(i % labelEvery === 0 || i === n-1){
+      add('text',{x:cx, y:H-B+18,'text-anchor':'middle','font-size':10.5, fill:'var(--ink-soft)',
+                  'font-family':"'IBM Plex Mono',monospace"},
+          n > 30 ? d.week_ending.slice(2,7) : d.week_ending.slice(5).replace('-','/'));
+    }
+  });
+
+  const pts = data.map((d,i)=>[L+step*i+step/2, y(d.screened_bull)]);
+  add('polyline',{points:pts.map(p=>p.join(' ')).join(' '), fill:'none',
+                  stroke:'var(--plot)','stroke-width':2,
+                  'stroke-linejoin':'round','stroke-linecap':'round'});
+  if(n <= 40){
+    pts.forEach((pt,i)=>{
+      tip(add('circle',{cx:pt[0],cy:pt[1],r:3.4,fill:'var(--panel)',
+                        stroke:'var(--plot)','stroke-width':2}),
+          `${data[i].week_ending}: ${data[i].screened_bull} passed the screen`);
+    });
+  }
+
+  // Counts on the screened series. Sits below each dot by default; flips above
+  // when the dot is near the baseline. The halo keeps it legible where the
+  // line crosses a bar.
+  if(showValues){
+    pts.forEach((pt,i)=>{
+      const below = pt[1] + 15;
+      const yy = below > T + ih - 3 ? pt[1] - 10 : below;
+      add('text',{x:pt[0], y:yy, 'text-anchor':'middle', 'font-size':10.5,
+                  'font-weight':600, fill:'var(--plot)',
+                  'font-family':"'IBM Plex Mono',monospace",
+                  stroke:'var(--panel)', 'stroke-width':3.2,
+                  'paint-order':'stroke', 'stroke-linejoin':'round'},
+          data[i].screened_bull);
+    });
+  }
+
+  add('line',{x1:L,x2:W-R,y1:T+ih,y2:T+ih,stroke:'var(--ink-faint)','stroke-width':1.2});
+  host.appendChild(svg);
+
+  const first=data[0], last=data[n-1];
+  const delta = last.universe_bull - first.universe_bull;
+  const dir = delta>0 ? 'expanding' : delta<0 ? 'contracting' : 'flat';
+  const peak = data.reduce((a,b)=>b.universe_bull>a.universe_bull?b:a);
+  const avg = Math.round(data.reduce((t,d)=>t+d.universe_bull,0)/n);
+  const atLatest = state.endIdx === state.history.length-1;
+  $('trendnote').textContent =
+    `${n} week${n===1?'':'s'}, ${first.week_ending} to ${last.week_ending}`
+    + `${atLatest ? '' : ' (scrolled back — press Latest to return)'}. `
+    + `Bull gaps went ${first.universe_bull} to ${last.universe_bull} — ${dir}. `
+    + `Peak ${peak.universe_bull} on ${peak.week_ending}; average ${avg}. `
+    + `Hover any bar for that week's exact count.`;
+}
+
+function fillWeekPickers(){
+  const opts = state.history.map((d,i)=>
+    `<option value="${i}">${d.week_ending}</option>`).join('');
+  $('fromweek').innerHTML = opts;
+  $('toweek').innerHTML   = opts;
+}
+
+/* ---------- industry concentration ---------- */
+/* Follows the chart's date range. Sums the per-week industry tallies stored in
+   history.json across the selected window. Falls back to the latest week's
+   matches if the history predates that field. */
+function drawConcentration(){
+  const host = $('conc');
+  const data = trendWindow();
+  const hasIndustryHistory = data.length && data.some(d => d.industries);
+
+  let tally = {}, total = 0, caption = '';
+
+  if(hasIndustryHistory){
+    data.forEach(d=>{
+      for(const [ind,n] of Object.entries(d.industries || {})){
+        tally[ind] = (tally[ind]||0) + n;
+        total += n;
+      }
+    });
+    caption = data.length === 1
+      ? `Bull micro gaps in the week ending ${data[0].week_ending}`
+      : `Bull micro gaps across ${data.length} weeks, `
+        + `${data[0].week_ending} to ${data[data.length-1].week_ending}`;
+  } else {
+    state.rows.filter(r=>r.micro_gap==='Bull').forEach(r=>{
+      tally[r.industry] = (tally[r.industry]||0) + 1; total += 1;
+    });
+    caption = "Bull micro gaps among this week's matches";
+  }
+
+  $('conccap').textContent = caption;
+
+  const items = Object.entries(tally).sort((a,b)=>b[1]-a[1]).slice(0,12);
+  if(!items.length){
+    host.innerHTML = '<p class="note">No bull micro gaps in this range.</p>';
+    return;
+  }
+  const max = items[0][1];
+
+  host.innerHTML = items.map(([ind,n])=>{
+    const share = total ? (n/total*100).toFixed(1) : '0.0';
+    return `
+    <div class="concrow">
+      <span class="concname" title="${ind}">${ind}</span>
+      <span class="concbar"><span style="width:${(n/max*100).toFixed(1)}%"></span></span>
+      <span class="concnum">${n}</span>
+      <span class="concpct">${share}%</span>
+    </div>`;
+  }).join('');
+}
+
+/* ---------- table ---------- */
+function visible(){
+  return state.rows.filter(r=>{
+    if(state.gap!=='all' && r.micro_gap!==state.gap) return false;
+    if(state.industry!=='all' && r.industry!==state.industry) return false;
+    if(state.nearOnly && !(r.near_52w_high||r.near_ath)) return false;
+    if(state.q){
+      const q=state.q.toLowerCase();
+      if(!r.symbol.toLowerCase().includes(q) && !(r.name||'').toLowerCase().includes(q)) return false;
+    }
+    return true;
+  }).sort((a,b)=>{
+    const col = COLUMNS.find(c=>c.key===state.sortKey);
+    let x=a[state.sortKey], y=b[state.sortKey];
+    if(col && col.type==='num'){
+      x = (x===null||x===undefined)?-Infinity:x;
+      y = (y===null||y===undefined)?-Infinity:y;
+      return (x-y)*state.sortDir;
+    }
+    return String(x??'').localeCompare(String(y??''))*state.sortDir;
+  });
+}
+
+function renderHead(){
+  $('head').innerHTML = COLUMNS.map(c=>{
+    const arrow = c.key===state.sortKey ? `<span class="ar">${state.sortDir>0?'▲':'▼'}</span>` : '';
+    const sortable = c.type!=='none';
+    return `<th class="${c.align==='l'?'l':''}" data-key="${c.key}"
+             ${sortable?'':'style="cursor:default"'}>${c.label} ${arrow}</th>`;
+  }).join('');
+  $('head').querySelectorAll('th').forEach(th=>{
+    const key = th.dataset.key;
+    const col = COLUMNS.find(c=>c.key===key);
+    if(!col || col.type==='none') return;
+    th.addEventListener('click',()=>{
+      if(state.sortKey===key) state.sortDir*=-1;
+      else { state.sortKey=key; state.sortDir = col.type==='num' ? -1 : 1; }
+      renderHead(); renderRows();
+    });
+  });
+}
+
+function renderRows(){
+  const rows = visible();
+  $('count').textContent = `${rows.length} of ${state.rows.length} shown`;
+  const body = $('rows');
+  body.innerHTML = '';
+
+  if(!rows.length){
+    body.innerHTML = `<tr><td class="empty" colspan="${COLUMNS.length}">
+      Nothing matches these filters. Clear the search or switch the gap filter back to All.</td></tr>`;
+    return;
+  }
+
+  const frag = document.createDocumentFragment();
+  rows.forEach(r=>{
+    const tr = document.createElement('tr');
+    const cell = (html, cls='') => {
+      const td=document.createElement('td'); td.className=cls; td.innerHTML=html; tr.appendChild(td); return td;
+    };
+    cell(`<span class="tick">${r.symbol}</span>`,'l');
+    cell(`<span class="name" title="${(r.name||'').replace(/"/g,'&quot;')}">${r.name||''}</span>`,'l');
+    cell('','l').appendChild(gapGlyph(r.candles, r.micro_gap));
+    const gcls = r.micro_gap==='Bull'?'bull':r.micro_gap==='Bear'?'bear':'none';
+    cell(`<span class="tag ${gcls}">${r.micro_gap}</span>`,'l');
+    cell(num(r.price,2));
+    cell(`<span class="pos">+${num(r.weekly_gain_pct,2)}</span>`);
+    cell(num(r.adr_pct,2));
+    cell(num(r.pct_above_ema,1));
+    cell(num(r.pct_from_52w_high,1));
+    cell(num(r.pct_from_ath,1));
+    const flags=[]; if(r.near_52w_high) flags.push('52w'); if(r.near_ath) flags.push('ATH');
+    cell(flags.length?`<span class="flag">${flags.join(' · ')}</span>`:'<span style="color:var(--ink-faint)">—</span>','l');
+    cell(money(r.market_cap));
+    cell(`<span class="ind">${r.industry}</span>`,'l');
+    cell(`<span class="ind">${r.sub_industry}</span>`,'l');
+    frag.appendChild(tr);
+  });
+  body.appendChild(frag);
+}
+
+/* ---------- csv ---------- */
+function downloadCSV(){
+  const cols = COLUMNS.filter(c=>c.type!=='none').map(c=>c.key)
+    .concat(['near_52w_high','near_ath','week_ending']);
+  const esc = v => `"${String(v??'').replace(/"/g,'""')}"`;
+  const lines = [cols.join(',')].concat(
+    visible().map(r=>cols.map(k=>esc(r[k])).join(','))
+  );
+  const url = URL.createObjectURL(new Blob([lines.join('\n')],{type:'text/csv'}));
+  const a = document.createElement('a');
+  a.href=url; a.download=`micro-gap-scan-${(state.week||'latest')}.csv`; a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ---------- boot ---------- */
+function boot(snapshot, history){
+  state.rows = snapshot.results || [];
+  state.history = history || [];
+  state.endIdx = Math.max(0, state.history.length - 1);
+  state.startIdx = Math.max(0, state.endIdx - 25);   // default view: last 6 months
+  state.week = snapshot.week_ending;
+
+  const stamp = new Date(snapshot.generated_at);
+  $('eyebrow').textContent =
+    `Week ending ${snapshot.week_ending} · scanned ${stamp.toLocaleString()}`;
+
+  const near = state.rows.filter(r=>r.near_52w_high||r.near_ath).length;
+  $('stats').innerHTML = `
+    <div class="stat"><div class="k">Matches</div><div class="v">${snapshot.match_count}</div></div>
+    <div class="stat"><div class="k">Bull micro gaps</div><div class="v bull">${snapshot.bull_gap_count}</div></div>
+    <div class="stat"><div class="k">Bear micro gaps</div><div class="v bear">${snapshot.bear_gap_count}</div></div>
+    <div class="stat"><div class="k">Within 10% of a high</div><div class="v">${near}</div></div>
+    <div class="stat"><div class="k">Universe scanned</div><div class="v">${snapshot.universe_size.toLocaleString()}</div></div>`;
+
+  fillWeekPickers();
+  syncRange();
+
+  const inds = [...new Set(state.rows.map(r=>r.industry))].sort();
+  $('industry').innerHTML = '<option value="all">All industries</option>'
+    + inds.map(i=>`<option value="${i}">${i}</option>`).join('');
+
+  renderHead(); renderRows();
+
+  $('rangeseg').addEventListener('click', e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    applyPreset(Number(b.dataset.weeks));
+  });
+  $('fromweek').addEventListener('change', e=>{
+    state.startIdx = Number(e.target.value);
+    if(state.startIdx > state.endIdx) state.endIdx = state.startIdx;
+    syncRange();
+  });
+  $('toweek').addEventListener('change', e=>{
+    state.endIdx = Number(e.target.value);
+    if(state.endIdx < state.startIdx) state.startIdx = state.endIdx;
+    syncRange();
+  });
+  $('latest').addEventListener('click', ()=>{
+    const n = state.endIdx - state.startIdx;
+    state.endIdx = state.history.length-1;
+    state.startIdx = Math.max(0, state.endIdx - n);
+    syncRange();
+  });
+
+  $('gapseg').addEventListener('click', e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    state.gap = b.dataset.gap;
+    $('gapseg').querySelectorAll('button').forEach(x=>
+      x.setAttribute('aria-pressed', String(x===b)));
+    renderRows();
+  });
+  $('industry').addEventListener('change', e=>{ state.industry=e.target.value; renderRows(); });
+  $('q').addEventListener('input', e=>{ state.q=e.target.value.trim(); renderRows(); });
+  $('near').addEventListener('change', e=>{ state.nearOnly=e.target.checked; renderRows(); });
+  $('csv').addEventListener('click', downloadCSV);
+
+  const f = snapshot.filters;
+  $('foot').innerHTML =
+    `<p><strong>Micro gap.</strong> Three weekly candles W-2, W-1, W0. Bull requires `
+    + `low(W0) &gt; high(W-2) with a rising staircase of lows: low(W-1) &ge; low(W-2) and `
+    + `low(W0) &ge; low(W-1). Bear is the mirror. Same definition as the `
+    + `<code>Open Micro Gaps with Patterns</code> Pine indicator. The glyph in each row draws `
+    + `those three real candles with the gap void shaded.</p>`
+    + `<p><strong>On the bear count.</strong> It will nearly always read zero, and that is `
+    + `arithmetic rather than a bug: a bear gap needs high(W0) &lt; low(W-2), which a stock `
+    + `that gained ${f.min_weekly_gain_pct}%+ over the week essentially cannot satisfy. The `
+    + `column is kept so you can spot the rare exception, but to hunt bear gaps properly you `
+    + `want the gain filter inverted.</p>`
+    + `<p><strong>Filters.</strong> Weekly gain &gt; ${f.min_weekly_gain_pct}%, price `
+    + `$${f.price_range[0]}–$${f.price_range[1]}, close above the ${f.above_weekly_ema}-week EMA, `
+    + `ADR% &gt; ${f.min_adr_pct}, market cap &gt; $${(f.min_market_cap/1e9).toFixed(0)}B. `
+    + `ADR% is average daily <em>range</em>: 100 × (mean(high/low over 20 days) − 1).</p>`
+    + `<p>Prices from Yahoo Finance; listings, market caps and industry groups from Nasdaq. `
+    + `Weekly bars close Friday. Not investment advice.</p>`;
+}
+
+Promise.all([
+  fetch('results.json?t='+Date.now()).then(r=>r.json()),
+  fetch('history.json?t='+Date.now()).then(r=>r.json()).catch(()=>[]),
+]).then(([s,h])=>boot(s,h)).catch(err=>{
+  $('eyebrow').textContent = 'No results loaded';
+  $('rows').innerHTML = `<tr><td class="empty" colspan="${COLUMNS.length}">
+    Couldn\u2019t read <code>results.json</code>. Run the scan from the Actions tab, wait for it to
+    finish, then reload this page.<br><span style="color:var(--ink-faint);font-size:11px">${err}</span></td></tr>`;
+});
+</script>
+</body>
+</html>
