@@ -80,8 +80,23 @@
     display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
     border:1px solid var(--rule);background:var(--panel);margin-bottom:18px;
   }
-  .stat{padding:16px 18px;border-right:1px solid var(--rule-soft);}
+  .stat{
+    padding:16px 18px;border-right:1px solid var(--rule-soft);
+    background:transparent;border-top:0;border-bottom:0;border-left:0;
+    font-family:inherit;text-align:left;color:inherit;display:block;width:100%;
+    position:relative;
+  }
+  button.stat{cursor:pointer;}
+  button.stat:hover{background:var(--panel-2);}
+  .stat.static{cursor:default;}
   .stat:last-child{border-right:0;}
+  /* The combined screen is the one to look at first, so it gets a standing marker. */
+  .stat.primary{background:linear-gradient(var(--panel-2),var(--panel-2));}
+  .stat.primary .k{color:var(--bull);}
+  button.stat[aria-pressed="true"]{background:var(--panel-2);}
+  button.stat[aria-pressed="true"]::before{
+    content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--plot);
+  }
   .stat .k{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);}
   .stat .v{
     font-family:'Bricolage Grotesque',system-ui,sans-serif;
@@ -202,6 +217,7 @@
       <div class="legend">
         <span><i style="background:var(--bull)"></i>Whole universe</span>
         <span><i style="background:var(--plot)"></i>Passed the screen</span>
+        <span><i style="background:var(--bear)"></i>Near a 52w / all-time high</span>
       </div>
     </div>
     <div class="rangebar">
@@ -432,37 +448,61 @@ function drawTrend(){
     }
   });
 
-  const pts = data.map((d,i)=>[L+step*i+step/2, y(d.screened_bull)]);
-  add('polyline',{points:pts.map(p=>p.join(' ')).join(' '), fill:'none',
-                  stroke:'var(--plot)','stroke-width':2,
-                  'stroke-linejoin':'round','stroke-linecap':'round'});
-  if(n <= 40){
-    pts.forEach((pt,i)=>{
-      tip(add('circle',{cx:pt[0],cy:pt[1],r:3.4,fill:'var(--panel)',
-                        stroke:'var(--plot)','stroke-width':2}),
-          `${data[i].week_ending}: ${data[i].screened_bull} passed the screen`);
-    });
-  }
+  /* Two overlay series over the same bars. Both are subsets of the bar count,
+     so their dots never sit above the bar top.
+       plot (blue) — bull gaps that also passed the gain / price / EMA screen
+       bear (red)  — bull gaps in stocks within 10% of a 52w or all-time high
+     Blue labels hang below their dots and red labels sit above theirs, so the
+     two stay apart wherever the lines run close together. */
+  const SERIES = [
+    {key:'screened_bull',  colour:'var(--plot)', place:'below',
+     label:'passed the screen'},
+    {key:'near_high_bull', colour:'var(--bear)', place:'above',
+     label:'near a 52w/all-time high'},
+  ];
 
-  // Counts on the screened series. Sits below each dot by default; flips above
-  // when the dot is near the baseline. The halo keeps it legible where the
-  // line crosses a bar.
-  if(showValues){
-    pts.forEach((pt,i)=>{
-      const below = pt[1] + 15;
-      const yy = below > T + ih - 3 ? pt[1] - 10 : below;
-      add('text',{x:pt[0], y:yy, 'text-anchor':'middle', 'font-size':10.5,
-                  'font-weight':600, fill:'var(--plot)',
-                  'font-family':"'IBM Plex Mono',monospace",
-                  stroke:'var(--panel)', 'stroke-width':3.2,
-                  'paint-order':'stroke', 'stroke-linejoin':'round'},
-          data[i].screened_bull);
-    });
-  }
+  SERIES.forEach(series=>{
+    if(!data.some(d => d[series.key] !== undefined)) return;
+    const pts = data.map((d,i)=>[L+step*i+step/2, y(d[series.key] || 0)]);
+
+    add('polyline',{points:pts.map(q=>q.join(' ')).join(' '), fill:'none',
+                    stroke:series.colour,'stroke-width':2,
+                    'stroke-linejoin':'round','stroke-linecap':'round'});
+
+    if(n <= 40){
+      pts.forEach((pt,i)=>{
+        tip(add('circle',{cx:pt[0],cy:pt[1],r:3.4,fill:'var(--panel)',
+                          stroke:series.colour,'stroke-width':2}),
+            `${data[i].week_ending}: ${data[i][series.key] || 0} ${series.label}`);
+      });
+    }
+
+    if(showValues){
+      pts.forEach((pt,i)=>{
+        let yy;
+        if(series.place === 'below'){
+          const below = pt[1] + 15;
+          yy = below > T + ih - 3 ? pt[1] - 10 : below;   // don't run off the axis
+        } else {
+          const above = pt[1] - 10;
+          const barTop = y(data[i].universe_bull);
+          yy = above < barTop + 13 ? pt[1] + 15 : above;  // don't collide with the bar value
+        }
+        add('text',{x:pt[0], y:yy, 'text-anchor':'middle', 'font-size':10.5,
+                    'font-weight':600, fill:series.colour,
+                    'font-family':"'IBM Plex Mono',monospace",
+                    stroke:'var(--panel)', 'stroke-width':3.2,
+                    'paint-order':'stroke', 'stroke-linejoin':'round'},
+            data[i][series.key] || 0);
+      });
+    }
+  });
 
   add('line',{x1:L,x2:W-R,y1:T+ih,y2:T+ih,stroke:'var(--ink-faint)','stroke-width':1.2});
   host.appendChild(svg);
 
+  // Summary sentence also reports the near-high share when that series exists.
+  const hasNear = data.some(d => d.near_high_bull !== undefined);
   const first=data[0], last=data[n-1];
   const delta = last.universe_bull - first.universe_bull;
   const dir = delta>0 ? 'expanding' : delta<0 ? 'contracting' : 'flat';
@@ -474,7 +514,12 @@ function drawTrend(){
     + `${atLatest ? '' : ' (scrolled back — press Latest to return)'}. `
     + `Bull gaps went ${first.universe_bull} to ${last.universe_bull} — ${dir}. `
     + `Peak ${peak.universe_bull} on ${peak.week_ending}; average ${avg}. `
-    + `Hover any bar for that week's exact count.`;
+    + (hasNear
+        ? `Latest week: ${last.near_high_bull} of ${last.universe_bull} bull gaps `
+          + `(${last.universe_bull ? Math.round(last.near_high_bull/last.universe_bull*100) : 0}%) `
+          + `were near a high. `
+        : '')
+    + `Hover any point for that week's exact counts.`;
 }
 
 function fillWeekPickers(){
@@ -571,8 +616,16 @@ function renderHead(){
     th.addEventListener('click',()=>{
       if(state.sortKey===key) state.sortDir*=-1;
       else { state.sortKey=key; state.sortDir = col.type==='num' ? -1 : 1; }
-      renderHead(); renderRows();
+      renderHead(); markActiveStat(); renderRows();
     });
+  });
+}
+
+function markActiveStat(){
+  document.querySelectorAll('#stats button.stat').forEach(t=>{
+    const on = t.dataset.gap === state.gap
+            && (t.dataset.near === '1') === state.nearOnly;
+    t.setAttribute('aria-pressed', String(on));
   });
 }
 
@@ -641,13 +694,36 @@ function boot(snapshot, history){
   $('eyebrow').textContent =
     `Week ending ${snapshot.week_ending} · scanned ${stamp.toLocaleString()}`;
 
-  const near = state.rows.filter(r=>r.near_52w_high||r.near_ath).length;
+  const isNear = r => r.near_52w_high || r.near_ath;
+  const near = state.rows.filter(isNear).length;
+  const bullNear = state.rows.filter(r=>r.micro_gap==='Bull' && isNear(r)).length;
+
+  // Each tile is a shortcut that applies its own filter combination.
   $('stats').innerHTML = `
-    <div class="stat"><div class="k">Matches</div><div class="v">${snapshot.match_count}</div></div>
-    <div class="stat"><div class="k">Bull micro gaps</div><div class="v bull">${snapshot.bull_gap_count}</div></div>
-    <div class="stat"><div class="k">Bear micro gaps</div><div class="v bear">${snapshot.bear_gap_count}</div></div>
-    <div class="stat"><div class="k">Within 10% of a high</div><div class="v">${near}</div></div>
-    <div class="stat"><div class="k">Universe scanned</div><div class="v">${snapshot.universe_size.toLocaleString()}</div></div>`;
+    <button class="stat" data-gap="all"  data-near="0"><div class="k">Matches</div>
+      <div class="v">${snapshot.match_count}</div></button>
+    <button class="stat" data-gap="Bull" data-near="0"><div class="k">Bull micro gaps</div>
+      <div class="v bull">${snapshot.bull_gap_count}</div></button>
+    <button class="stat primary" data-gap="Bull" data-near="1"><div class="k">Bull gap + near high</div>
+      <div class="v bull">${bullNear}</div></button>
+    <button class="stat" data-gap="Bear" data-near="0"><div class="k">Bear micro gaps</div>
+      <div class="v bear">${snapshot.bear_gap_count}</div></button>
+    <button class="stat" data-gap="all"  data-near="1"><div class="k">Within 10% of a high</div>
+      <div class="v">${near}</div></button>
+    <div class="stat static"><div class="k">Universe scanned</div>
+      <div class="v">${snapshot.universe_size.toLocaleString()}</div></div>`;
+
+  $('stats').addEventListener('click', e=>{
+    const t = e.target.closest('button.stat'); if(!t) return;
+    state.gap = t.dataset.gap;
+    state.nearOnly = t.dataset.near === '1';
+    $('gapseg').querySelectorAll('button').forEach(x=>
+      x.setAttribute('aria-pressed', String(x.dataset.gap === state.gap)));
+    $('near').checked = state.nearOnly;
+    markActiveStat();
+    renderRows();
+    document.querySelector('.tablewrap').scrollIntoView({behavior:'smooth', block:'start'});
+  });
 
   fillWeekPickers();
   syncRange();
@@ -656,7 +732,7 @@ function boot(snapshot, history){
   $('industry').innerHTML = '<option value="all">All industries</option>'
     + inds.map(i=>`<option value="${i}">${i}</option>`).join('');
 
-  renderHead(); renderRows();
+  renderHead(); markActiveStat(); renderRows();
 
   $('rangeseg').addEventListener('click', e=>{
     const b = e.target.closest('button'); if(!b) return;
@@ -684,11 +760,13 @@ function boot(snapshot, history){
     state.gap = b.dataset.gap;
     $('gapseg').querySelectorAll('button').forEach(x=>
       x.setAttribute('aria-pressed', String(x===b)));
-    renderRows();
+    markActiveStat(); renderRows();
   });
   $('industry').addEventListener('change', e=>{ state.industry=e.target.value; renderRows(); });
   $('q').addEventListener('input', e=>{ state.q=e.target.value.trim(); renderRows(); });
-  $('near').addEventListener('change', e=>{ state.nearOnly=e.target.checked; renderRows(); });
+  $('near').addEventListener('change', e=>{
+    state.nearOnly=e.target.checked; markActiveStat(); renderRows();
+  });
   $('csv').addEventListener('click', downloadCSV);
 
   const f = snapshot.filters;

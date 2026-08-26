@@ -3,6 +3,7 @@
   "week_ending": "2024-08-30",
   "universe_bull": 913,
   "screened_bull": 63,
+  "near_high_bull": 663,
   "stocks_covered": 2488,
   "bull_pct": 36.7,
   "industries": {
@@ -25,6 +26,7 @@
   "week_ending": "2024-09-06",
   "universe_bull": 184,
   "screened_bull": 15,
+  "near_high_bull": 145,
   "stocks_covered": 2488,
   "bull_pct": 7.4,
   "industries": {
@@ -46,6 +48,7 @@
   "week_ending": "2024-09-13",
   "universe_bull": 93,
   "screened_bull": 23,
+  "near_high_bull": 77,
   "stocks_covered": 2491,
   "bull_pct": 3.73,
   "industries": {
@@ -65,6 +68,7 @@
   "week_ending": "2024-09-20",
   "universe_bull": 320,
   "screened_bull": 95,
+  "near_high_bull": 232,
   "stocks_covered": 2491,
   "bull_pct": 12.85,
   "industries": {
@@ -87,6 +91,7 @@
   "week_ending": "2024-09-27",
   "universe_bull": 735,
   "screened_bull": 151,
+  "near_high_bull": 513,
   "stocks_covered": 2495,
   "bull_pct": 29.46,
   "industries": {
@@ -109,6 +114,7 @@
   "week_ending": "2024-10-04",
   "universe_bull": 225,
   "screened_bull": 65,
+  "near_high_bull": 145,
   "stocks_covered": 2497,
   "bull_pct": 9.01,
   "industries": {
@@ -130,6 +136,7 @@
   "week_ending": "2024-10-11",
   "universe_bull": 151,
   "screened_bull": 27,
+  "near_high_bull": 118,
   "stocks_covered": 2497,
   "bull_pct": 6.05,
   "industries": {
@@ -152,6 +159,7 @@
   "week_ending": "2024-10-18",
   "universe_bull": 373,
   "screened_bull": 116,
+  "near_high_bull": 296,
   "stocks_covered": 2497,
   "bull_pct": 14.94,
   "industries": {
@@ -174,6 +182,7 @@
   "week_ending": "2024-10-25",
   "universe_bull": 347,
   "screened_bull": 35,
+  "near_high_bull": 256,
   "stocks_covered": 2501,
   "bull_pct": 13.87,
   "industries": {
@@ -196,6 +205,7 @@
   "week_ending": "2024-11-01",
   "universe_bull": 88,
   "screened_bull": 25,
+  "near_high_bull": 62,
   "stocks_covered": 2502,
   "bull_pct": 3.52,
   "industries": {
@@ -215,6 +225,7 @@
   "week_ending": "2024-11-08",
   "universe_bull": 196,
   "screened_bull": 139,
+  "near_high_bull": 140,
   "stocks_covered": 2502,
   "bull_pct": 7.83,
   "industries": {
@@ -235,6 +246,7 @@
   "week_ending": "2024-11-15",
   "universe_bull": 563,
   "screened_bull": 58,
+  "near_high_bull": 389,
   "stocks_covered": 2503,
   "bull_pct": 22.49,
   "industries": {
@@ -257,6 +269,7 @@
   "week_ending": "2024-11-22",
   "universe_bull": 176,
   "screened_bull": 103,
+  "near_high_bull": 145,
   "stocks_covered": 2504,
   "bull_pct": 7.03,
   "industries": {
@@ -279,6 +292,7 @@
   "week_ending": "2024-11-29",
   "universe_bull": 342,
   "screened_bull": 67,
+  "near_high_bull": 284,
   "stocks_covered": 2505,
   "bull_pct": 13.65,
   "industries": {
@@ -301,6 +315,7 @@
   "week_ending": "2024-12-06",
   "universe_bull": 316,
   "screened_bull": 71,
+  "near_high_bull": 202,
   "stocks_covered": 2506,
   "bull_pct": 12.61,
   "industries": {
@@ -323,6 +338,7 @@
   "week_ending": "2024-12-13",
   "universe_bull": 141,
   "screened_bull": 40,
+  "near_high_bull": 81,
   "stocks_covered": 2507,
   "bull_pct": 5.62,
   "industries": {
@@ -342,6 +358,7 @@
   "week_ending": "2024-12-20",
   "universe_bull": 46,
   "screened_bull": 16,
+  "near_high_bull": 27,
   "stocks_covered": 2507,
   "bull_pct": 1.83,
   "industries": {
@@ -359,6 +376,7 @@
   "week_ending": "2024-12-27",
   "universe_bull": 54,
   "screened_bull": 15,
+  "near_high_bull": 33,
   "stocks_covered": 2507,
   "bull_pct": 2.15,
   "industries": {
@@ -378,6 +396,7 @@
   "week_ending": "2025-01-03",
   "universe_bull": 53,
   "screened_bull": 16,
+  "near_high_bull": 21,
   "stocks_covered": 2508,
   "bull_pct": 2.11,
   "industries": {
@@ -398,6 +417,7 @@
   "week_ending": "2025-01-10",
   "universe_bull": 159,
   "screened_bull": 28,
+  "near_high_bull": 54,
   "stocks_covered": 2508,
   "bull_pct": 6.34,
   "industries": {
@@ -420,6 +440,7 @@
   "week_ending": "2025-01-17",
   "universe_bull": 159,
   "screened_bull": 60,
+  "near_high_bull": 65,
   "stocks_covered": 2509,
   "bull_pct": 6.34,
   "industries": {
@@ -439,6 +460,7 @@
   "week_ending": "2025-01-24",
   "universe_bull": 440,
   "screened_bull": 81,
+  "near_high_bull": 257,
   "stocks_covered": 2511,
   "bull_pct": 17.52,
   "industries": {
@@ -460,6 +482,7 @@
   "week_ending": "2025-01-31",
   "universe_bull": 400,
   "screened_bull": 60,
+  "near_high_bull": 232,
   "stocks_covered": 2513,
   "bull_pct": 15.92,
   "industries": {
@@ -482,6 +505,7 @@
   "week_ending": "2025-02-07",
   "universe_bull": 153,
   "screened_bull": 39,
+  "near_high_bull": 112,
   "stocks_covered": 2516,
   "bull_pct": 6.08,
   "industries": {
@@ -502,6 +526,7 @@
   "week_ending": "2025-02-14",
   "universe_bull": 157,
   "screened_bull": 56,
+  "near_high_bull": 121,
   "stocks_covered": 2518,
   "bull_pct": 6.24,
   "industries": {
@@ -524,6 +549,7 @@
   "week_ending": "2025-02-21",
   "universe_bull": 241,
   "screened_bull": 35,
+  "near_high_bull": 125,
   "stocks_covered": 2520,
   "bull_pct": 9.56,
   "industries": {
@@ -546,6 +572,7 @@
   "week_ending": "2025-02-28",
   "universe_bull": 123,
   "screened_bull": 22,
+  "near_high_bull": 76,
   "stocks_covered": 2521,
   "bull_pct": 4.88,
   "industries": {
@@ -564,6 +591,7 @@
   "week_ending": "2025-03-07",
   "universe_bull": 112,
   "screened_bull": 24,
+  "near_high_bull": 72,
   "stocks_covered": 2522,
   "bull_pct": 4.44,
   "industries": {
@@ -583,6 +611,7 @@
   "week_ending": "2025-03-14",
   "universe_bull": 52,
   "screened_bull": 9,
+  "near_high_bull": 33,
   "stocks_covered": 2522,
   "bull_pct": 2.06,
   "industries": {
@@ -602,6 +631,7 @@
   "week_ending": "2025-03-21",
   "universe_bull": 103,
   "screened_bull": 22,
+  "near_high_bull": 42,
   "stocks_covered": 2523,
   "bull_pct": 4.08,
   "industries": {
@@ -623,6 +653,7 @@
   "week_ending": "2025-03-28",
   "universe_bull": 283,
   "screened_bull": 20,
+  "near_high_bull": 114,
   "stocks_covered": 2525,
   "bull_pct": 11.21,
   "industries": {
@@ -645,6 +676,7 @@
   "week_ending": "2025-04-04",
   "universe_bull": 28,
   "screened_bull": 5,
+  "near_high_bull": 10,
   "stocks_covered": 2527,
   "bull_pct": 1.11,
   "industries": {
@@ -661,6 +693,7 @@
   "week_ending": "2025-04-11",
   "universe_bull": 3,
   "screened_bull": 1,
+  "near_high_bull": 2,
   "stocks_covered": 2527,
   "bull_pct": 0.12,
   "industries": {
@@ -672,6 +705,7 @@
   "week_ending": "2025-04-18",
   "universe_bull": 22,
   "screened_bull": 7,
+  "near_high_bull": 7,
   "stocks_covered": 2528,
   "bull_pct": 0.87,
   "industries": {
@@ -688,6 +722,7 @@
   "week_ending": "2025-04-25",
   "universe_bull": 195,
   "screened_bull": 58,
+  "near_high_bull": 83,
   "stocks_covered": 2529,
   "bull_pct": 7.71,
   "industries": {
@@ -708,6 +743,7 @@
   "week_ending": "2025-05-02",
   "universe_bull": 457,
   "screened_bull": 112,
+  "near_high_bull": 110,
   "stocks_covered": 2529,
   "bull_pct": 18.07,
   "industries": {
@@ -730,6 +766,7 @@
   "week_ending": "2025-05-09",
   "universe_bull": 585,
   "screened_bull": 126,
+  "near_high_bull": 201,
   "stocks_covered": 2530,
   "bull_pct": 23.12,
   "industries": {
@@ -752,6 +789,7 @@
   "week_ending": "2025-05-16",
   "universe_bull": 969,
   "screened_bull": 541,
+  "near_high_bull": 309,
   "stocks_covered": 2533,
   "bull_pct": 38.26,
   "industries": {
@@ -774,6 +812,7 @@
   "week_ending": "2025-05-23",
   "universe_bull": 344,
   "screened_bull": 47,
+  "near_high_bull": 155,
   "stocks_covered": 2534,
   "bull_pct": 13.58,
   "industries": {
@@ -796,6 +835,7 @@
   "week_ending": "2025-05-30",
   "universe_bull": 176,
   "screened_bull": 37,
+  "near_high_bull": 111,
   "stocks_covered": 2535,
   "bull_pct": 6.94,
   "industries": {
@@ -817,6 +857,7 @@
   "week_ending": "2025-06-06",
   "universe_bull": 193,
   "screened_bull": 83,
+  "near_high_bull": 111,
   "stocks_covered": 2541,
   "bull_pct": 7.6,
   "industries": {
@@ -838,6 +879,7 @@
   "week_ending": "2025-06-13",
   "universe_bull": 376,
   "screened_bull": 83,
+  "near_high_bull": 121,
   "stocks_covered": 2546,
   "bull_pct": 14.77,
   "industries": {
@@ -860,6 +902,7 @@
   "week_ending": "2025-06-20",
   "universe_bull": 295,
   "screened_bull": 72,
+  "near_high_bull": 113,
   "stocks_covered": 2548,
   "bull_pct": 11.58,
   "industries": {
@@ -882,6 +925,7 @@
   "week_ending": "2025-06-27",
   "universe_bull": 119,
   "screened_bull": 45,
+  "near_high_bull": 79,
   "stocks_covered": 2552,
   "bull_pct": 4.66,
   "industries": {
@@ -904,6 +948,7 @@
   "week_ending": "2025-07-04",
   "universe_bull": 539,
   "screened_bull": 281,
+  "near_high_bull": 271,
   "stocks_covered": 2552,
   "bull_pct": 21.12,
   "industries": {
@@ -926,6 +971,7 @@
   "week_ending": "2025-07-11",
   "universe_bull": 641,
   "screened_bull": 83,
+  "near_high_bull": 245,
   "stocks_covered": 2554,
   "bull_pct": 25.1,
   "industries": {
@@ -948,6 +994,7 @@
   "week_ending": "2025-07-18",
   "universe_bull": 228,
   "screened_bull": 68,
+  "near_high_bull": 122,
   "stocks_covered": 2556,
   "bull_pct": 8.92,
   "industries": {
@@ -969,6 +1016,7 @@
   "week_ending": "2025-07-25",
   "universe_bull": 229,
   "screened_bull": 56,
+  "near_high_bull": 144,
   "stocks_covered": 2559,
   "bull_pct": 8.95,
   "industries": {
@@ -990,6 +1038,7 @@
   "week_ending": "2025-08-01",
   "universe_bull": 149,
   "screened_bull": 28,
+  "near_high_bull": 94,
   "stocks_covered": 2562,
   "bull_pct": 5.82,
   "industries": {
@@ -1011,6 +1060,7 @@
   "week_ending": "2025-08-08",
   "universe_bull": 157,
   "screened_bull": 44,
+  "near_high_bull": 116,
   "stocks_covered": 2564,
   "bull_pct": 6.12,
   "industries": {
@@ -1033,6 +1083,7 @@
   "week_ending": "2025-08-15",
   "universe_bull": 349,
   "screened_bull": 113,
+  "near_high_bull": 228,
   "stocks_covered": 2567,
   "bull_pct": 13.6,
   "industries": {
@@ -1055,6 +1106,7 @@
   "week_ending": "2025-08-22",
   "universe_bull": 486,
   "screened_bull": 219,
+  "near_high_bull": 270,
   "stocks_covered": 2567,
   "bull_pct": 18.93,
   "industries": {
@@ -1077,6 +1129,7 @@
   "week_ending": "2025-08-29",
   "universe_bull": 545,
   "screened_bull": 68,
+  "near_high_bull": 277,
   "stocks_covered": 2567,
   "bull_pct": 21.23,
   "industries": {
@@ -1099,6 +1152,7 @@
   "week_ending": "2025-09-05",
   "universe_bull": 203,
   "screened_bull": 66,
+  "near_high_bull": 123,
   "stocks_covered": 2570,
   "bull_pct": 7.9,
   "industries": {
@@ -1120,6 +1174,7 @@
   "week_ending": "2025-09-12",
   "universe_bull": 227,
   "screened_bull": 74,
+  "near_high_bull": 148,
   "stocks_covered": 2576,
   "bull_pct": 8.81,
   "industries": {
@@ -1142,6 +1197,7 @@
   "week_ending": "2025-09-19",
   "universe_bull": 368,
   "screened_bull": 134,
+  "near_high_bull": 241,
   "stocks_covered": 2580,
   "bull_pct": 14.26,
   "industries": {
@@ -1163,6 +1219,7 @@
   "week_ending": "2025-09-26",
   "universe_bull": 223,
   "screened_bull": 76,
+  "near_high_bull": 133,
   "stocks_covered": 2580,
   "bull_pct": 8.64,
   "industries": {
@@ -1184,6 +1241,7 @@
   "week_ending": "2025-10-03",
   "universe_bull": 225,
   "screened_bull": 78,
+  "near_high_bull": 158,
   "stocks_covered": 2583,
   "bull_pct": 8.71,
   "industries": {
@@ -1204,6 +1262,7 @@
   "week_ending": "2025-10-10",
   "universe_bull": 282,
   "screened_bull": 62,
+  "near_high_bull": 151,
   "stocks_covered": 2585,
   "bull_pct": 10.91,
   "industries": {
@@ -1225,6 +1284,7 @@
   "week_ending": "2025-10-17",
   "universe_bull": 126,
   "screened_bull": 55,
+  "near_high_bull": 61,
   "stocks_covered": 2585,
   "bull_pct": 4.87,
   "industries": {
@@ -1246,6 +1306,7 @@
   "week_ending": "2025-10-24",
   "universe_bull": 169,
   "screened_bull": 56,
+  "near_high_bull": 98,
   "stocks_covered": 2586,
   "bull_pct": 6.54,
   "industries": {
@@ -1267,6 +1328,7 @@
   "week_ending": "2025-10-31",
   "universe_bull": 300,
   "screened_bull": 97,
+  "near_high_bull": 187,
   "stocks_covered": 2588,
   "bull_pct": 11.59,
   "industries": {
@@ -1288,6 +1350,7 @@
   "week_ending": "2025-11-07",
   "universe_bull": 152,
   "screened_bull": 38,
+  "near_high_bull": 110,
   "stocks_covered": 2597,
   "bull_pct": 5.85,
   "industries": {
@@ -1308,6 +1371,7 @@
   "week_ending": "2025-11-14",
   "universe_bull": 206,
   "screened_bull": 62,
+  "near_high_bull": 133,
   "stocks_covered": 2597,
   "bull_pct": 7.93,
   "industries": {
@@ -1330,6 +1394,7 @@
   "week_ending": "2025-11-21",
   "universe_bull": 168,
   "screened_bull": 40,
+  "near_high_bull": 101,
   "stocks_covered": 2598,
   "bull_pct": 6.47,
   "industries": {
@@ -1351,6 +1416,7 @@
   "week_ending": "2025-11-28",
   "universe_bull": 164,
   "screened_bull": 72,
+  "near_high_bull": 108,
   "stocks_covered": 2598,
   "bull_pct": 6.31,
   "industries": {
@@ -1372,6 +1438,7 @@
   "week_ending": "2025-12-05",
   "universe_bull": 604,
   "screened_bull": 173,
+  "near_high_bull": 325,
   "stocks_covered": 2599,
   "bull_pct": 23.24,
   "industries": {
@@ -1394,6 +1461,7 @@
   "week_ending": "2025-12-12",
   "universe_bull": 535,
   "screened_bull": 156,
+  "near_high_bull": 257,
   "stocks_covered": 2602,
   "bull_pct": 20.56,
   "industries": {
@@ -1416,6 +1484,7 @@
   "week_ending": "2025-12-19",
   "universe_bull": 337,
   "screened_bull": 42,
+  "near_high_bull": 214,
   "stocks_covered": 2606,
   "bull_pct": 12.93,
   "industries": {
@@ -1437,6 +1506,7 @@
   "week_ending": "2025-12-26",
   "universe_bull": 271,
   "screened_bull": 45,
+  "near_high_bull": 187,
   "stocks_covered": 2606,
   "bull_pct": 10.4,
   "industries": {
@@ -1459,6 +1529,7 @@
   "week_ending": "2026-01-02",
   "universe_bull": 98,
   "screened_bull": 21,
+  "near_high_bull": 67,
   "stocks_covered": 2606,
   "bull_pct": 3.76,
   "industries": {
@@ -1480,6 +1551,7 @@
   "week_ending": "2026-01-09",
   "universe_bull": 131,
   "screened_bull": 77,
+  "near_high_bull": 80,
   "stocks_covered": 2608,
   "bull_pct": 5.02,
   "industries": {
@@ -1500,6 +1572,7 @@
   "week_ending": "2026-01-16",
   "universe_bull": 724,
   "screened_bull": 268,
+  "near_high_bull": 451,
   "stocks_covered": 2608,
   "bull_pct": 27.76,
   "industries": {
@@ -1522,6 +1595,7 @@
   "week_ending": "2026-01-23",
   "universe_bull": 416,
   "screened_bull": 105,
+  "near_high_bull": 304,
   "stocks_covered": 2609,
   "bull_pct": 15.94,
   "industries": {
@@ -1544,6 +1618,7 @@
   "week_ending": "2026-01-30",
   "universe_bull": 211,
   "screened_bull": 44,
+  "near_high_bull": 160,
   "stocks_covered": 2615,
   "bull_pct": 8.07,
   "industries": {
@@ -1566,6 +1641,7 @@
   "week_ending": "2026-02-06",
   "universe_bull": 196,
   "screened_bull": 103,
+  "near_high_bull": 166,
   "stocks_covered": 2620,
   "bull_pct": 7.48,
   "industries": {
@@ -1587,6 +1663,7 @@
   "week_ending": "2026-02-13",
   "universe_bull": 507,
   "screened_bull": 122,
+  "near_high_bull": 418,
   "stocks_covered": 2622,
   "bull_pct": 19.34,
   "industries": {
@@ -1609,6 +1686,7 @@
   "week_ending": "2026-02-20",
   "universe_bull": 373,
   "screened_bull": 80,
+  "near_high_bull": 298,
   "stocks_covered": 2624,
   "bull_pct": 14.21,
   "industries": {
@@ -1631,6 +1709,7 @@
   "week_ending": "2026-02-27",
   "universe_bull": 141,
   "screened_bull": 47,
+  "near_high_bull": 110,
   "stocks_covered": 2626,
   "bull_pct": 5.37,
   "industries": {
@@ -1652,6 +1731,7 @@
   "week_ending": "2026-03-06",
   "universe_bull": 156,
   "screened_bull": 27,
+  "near_high_bull": 75,
   "stocks_covered": 2629,
   "bull_pct": 5.93,
   "industries": {
@@ -1672,6 +1752,7 @@
   "week_ending": "2026-03-13",
   "universe_bull": 105,
   "screened_bull": 33,
+  "near_high_bull": 44,
   "stocks_covered": 2632,
   "bull_pct": 3.99,
   "industries": {
@@ -1691,6 +1772,7 @@
   "week_ending": "2026-03-20",
   "universe_bull": 57,
   "screened_bull": 24,
+  "near_high_bull": 38,
   "stocks_covered": 2634,
   "bull_pct": 2.16,
   "industries": {
@@ -1711,6 +1793,7 @@
   "week_ending": "2026-03-27",
   "universe_bull": 85,
   "screened_bull": 41,
+  "near_high_bull": 48,
   "stocks_covered": 2636,
   "bull_pct": 3.22,
   "industries": {
@@ -1732,6 +1815,7 @@
   "week_ending": "2026-04-03",
   "universe_bull": 130,
   "screened_bull": 46,
+  "near_high_bull": 70,
   "stocks_covered": 2637,
   "bull_pct": 4.93,
   "industries": {
@@ -1754,6 +1838,7 @@
   "week_ending": "2026-04-10",
   "universe_bull": 337,
   "screened_bull": 144,
+  "near_high_bull": 207,
   "stocks_covered": 2638,
   "bull_pct": 12.77,
   "industries": {
@@ -1776,6 +1861,7 @@
   "week_ending": "2026-04-17",
   "universe_bull": 907,
   "screened_bull": 388,
+  "near_high_bull": 587,
   "stocks_covered": 2643,
   "bull_pct": 34.32,
   "industries": {
@@ -1798,6 +1884,7 @@
   "week_ending": "2026-04-24",
   "universe_bull": 609,
   "screened_bull": 153,
+  "near_high_bull": 328,
   "stocks_covered": 2646,
   "bull_pct": 23.02,
   "industries": {
@@ -1820,6 +1907,7 @@
   "week_ending": "2026-05-01",
   "universe_bull": 238,
   "screened_bull": 93,
+  "near_high_bull": 162,
   "stocks_covered": 2651,
   "bull_pct": 8.98,
   "industries": {
@@ -1842,6 +1930,7 @@
   "week_ending": "2026-05-08",
   "universe_bull": 204,
   "screened_bull": 87,
+  "near_high_bull": 154,
   "stocks_covered": 2653,
   "bull_pct": 7.69,
   "industries": {
@@ -1862,6 +1951,7 @@
   "week_ending": "2026-05-15",
   "universe_bull": 280,
   "screened_bull": 75,
+  "near_high_bull": 160,
   "stocks_covered": 2658,
   "bull_pct": 10.53,
   "industries": {
@@ -1883,6 +1973,7 @@
   "week_ending": "2026-05-22",
   "universe_bull": 116,
   "screened_bull": 46,
+  "near_high_bull": 85,
   "stocks_covered": 2660,
   "bull_pct": 4.36,
   "industries": {
@@ -1904,6 +1995,7 @@
   "week_ending": "2026-05-29",
   "universe_bull": 232,
   "screened_bull": 96,
+  "near_high_bull": 138,
   "stocks_covered": 2662,
   "bull_pct": 8.72,
   "industries": {
@@ -1924,6 +2016,7 @@
   "week_ending": "2026-06-05",
   "universe_bull": 315,
   "screened_bull": 66,
+  "near_high_bull": 120,
   "stocks_covered": 2669,
   "bull_pct": 11.8,
   "industries": {
@@ -1945,6 +2038,7 @@
   "week_ending": "2026-06-12",
   "universe_bull": 113,
   "screened_bull": 53,
+  "near_high_bull": 76,
   "stocks_covered": 2674,
   "bull_pct": 4.23,
   "industries": {
@@ -1963,6 +2057,7 @@
   "week_ending": "2026-06-19",
   "universe_bull": 385,
   "screened_bull": 91,
+  "near_high_bull": 244,
   "stocks_covered": 2677,
   "bull_pct": 14.38,
   "industries": {
@@ -1985,6 +2080,7 @@
   "week_ending": "2026-06-26",
   "universe_bull": 252,
   "screened_bull": 152,
+  "near_high_bull": 148,
   "stocks_covered": 2681,
   "bull_pct": 9.4,
   "industries": {
@@ -2006,6 +2102,7 @@
   "week_ending": "2026-07-03",
   "universe_bull": 492,
   "screened_bull": 160,
+  "near_high_bull": 336,
   "stocks_covered": 2685,
   "bull_pct": 18.32,
   "industries": {
@@ -2026,6 +2123,7 @@
   "week_ending": "2026-07-10",
   "universe_bull": 406,
   "screened_bull": 61,
+  "near_high_bull": 163,
   "stocks_covered": 2687,
   "bull_pct": 15.11,
   "industries": {
@@ -2045,6 +2143,7 @@
   "week_ending": "2026-07-17",
   "universe_bull": 258,
   "screened_bull": 110,
+  "near_high_bull": 123,
   "stocks_covered": 2689,
   "bull_pct": 9.59,
   "industries": {
@@ -2066,6 +2165,7 @@
   "week_ending": "2026-07-24",
   "universe_bull": 203,
   "screened_bull": 34,
+  "near_high_bull": 138,
   "stocks_covered": 2689,
   "bull_pct": 7.55,
   "industries": {
@@ -2087,6 +2187,7 @@
   "week_ending": "2026-07-31",
   "universe_bull": 110,
   "screened_bull": 33,
+  "near_high_bull": 74,
   "stocks_covered": 2693,
   "bull_pct": 4.08,
   "industries": {
@@ -2108,6 +2209,7 @@
   "week_ending": "2026-08-07",
   "universe_bull": 406,
   "screened_bull": 199,
+  "near_high_bull": 201,
   "stocks_covered": 2695,
   "bull_pct": 15.06,
   "industries": {
@@ -2129,6 +2231,7 @@
   "week_ending": "2026-08-14",
   "universe_bull": 538,
   "screened_bull": 145,
+  "near_high_bull": 244,
   "stocks_covered": 2695,
   "bull_pct": 19.96,
   "industries": {
@@ -2151,6 +2254,7 @@
   "week_ending": "2026-08-21",
   "universe_bull": 232,
   "screened_bull": 94,
+  "near_high_bull": 129,
   "stocks_covered": 2695,
   "bull_pct": 8.61,
   "industries": {
