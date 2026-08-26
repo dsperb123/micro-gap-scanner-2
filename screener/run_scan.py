@@ -130,9 +130,12 @@ def build_history(
     """Count bull micro gaps per week-ending across the whole universe.
 
     Two series are produced:
-      universe_bull  every stock in the universe with a bull gap that week
-      screened_bull  the subset that also cleared the gain / price / EMA
-                     filters as at that week
+      universe_bull   every stock in the universe with a bull gap that week
+      screened_bull   the subset that also cleared the gain / price / EMA
+                      filters as at that week
+      near_high_bull  the subset that was also within the near-high threshold
+                      of its 52-week or all-time high *as at that week* — the
+                      highs are recomputed bar by bar, not taken from today
 
     Each week also carries a per-industry tally of its bull gaps, which is what
     lets the dashboard's industry panel follow the chart's date range instead of
@@ -145,12 +148,15 @@ def build_history(
     weeks = int(config["history_weeks"])
     universe_counts: dict[dt.date, int] = {}
     screened_counts: dict[dt.date, int] = {}
+    near_high_counts: dict[dt.date, int] = {}
     span_counts: dict[dt.date, int] = {}
     industry_counts: dict[dt.date, dict[str, int]] = {}
 
     ema_length = int(config["ema_length"])
     min_gain = float(config["min_weekly_gain_pct"])
     min_price, max_price = float(config["min_price"]), float(config["max_price"])
+    near_frac = 1.0 - float(config["near_high_threshold_pct"]) / 100.0
+    lookback = 52
 
     for symbol, weekly in weekly_data.items():
         if len(weekly) < 3:
@@ -169,6 +175,11 @@ def build_history(
             & (close > ema)
         )
 
+        # Point-in-time highs: rolling for 52 weeks, expanding for all-time.
+        high_52w = weekly["High"].rolling(lookback, min_periods=1).max()
+        high_ath = weekly["High"].cummax()
+        near_high = (close >= near_frac * high_52w) | (close >= near_frac * high_ath)
+
         for stamp in flags.index[-weeks:]:
             friday = week_ending(stamp)
             span_counts[friday] = span_counts.get(friday, 0) + 1
@@ -178,6 +189,8 @@ def build_history(
                 bucket[industry] = bucket.get(industry, 0) + 1
                 if bool(qualifies.get(stamp, False)):
                     screened_counts[friday] = screened_counts.get(friday, 0) + 1
+                if bool(near_high.get(stamp, False)):
+                    near_high_counts[friday] = near_high_counts.get(friday, 0) + 1
 
     ordered = sorted(span_counts.keys())[-weeks:]
     history = []
@@ -189,6 +202,7 @@ def build_history(
                 "week_ending": friday.isoformat(),
                 "universe_bull": bull,
                 "screened_bull": screened_counts.get(friday, 0),
+                "near_high_bull": near_high_counts.get(friday, 0),
                 "stocks_covered": covered,
                 "bull_pct": round(bull / covered * 100.0, 2) if covered else 0.0,
                 "industries": dict(
